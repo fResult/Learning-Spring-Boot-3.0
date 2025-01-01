@@ -24,38 +24,44 @@ public class HomeControllerTest {
   @Test
   @WithMockUser
   void indexPageHasSeveralHtmlForms() throws Exception {
-    String html = mvc.perform( //
-      get("/")) //
-      .andExpect(status().isOk()) //
-      .andExpect( //
-        content().string( //
-          containsString("Username: user"))) //
-      .andExpect( //
-        content().string( //
-          containsString("Authorities: [ROLE_USER]"))) //
-      .andReturn() //
-      .getResponse().getContentAsString();
+    String html =
+        mvc.perform( //
+                get("/")) //
+            .andExpect(status().isOk()) //
+            .andExpect( //
+                content()
+                    .string( //
+                        containsString("Username: user"))) //
+            .andExpect( //
+                content()
+                    .string( //
+                        containsString("Authorities: [ROLE_USER]"))) //
+            .andReturn() //
+            .getResponse()
+            .getContentAsString();
 
-    assertThat(html).contains( //
-      "<form action=\"/logout\"", //
-      "<form action=\"/search\"", //
-      "<form action=\"/new-video\"");
+    assertThat(html)
+        .contains( //
+            "<form action=\"/logout\"", //
+            "<form action=\"/search\"", //
+            "<form action=\"/new-video\"");
   }
 
   @Test
   @WithMockUser
   void postNewVideoShouldWork() throws Exception {
     mvc.perform( //
-      post("/new-video") //
-        .param("name", "new video") //
-        .param("description", "new desc") //
-        .with(csrf())) //
-      .andExpect(redirectedUrl("/"));
+            post("/new-video") //
+                .param("name", "new video") //
+                .param("description", "new desc") //
+                .with(csrf())) //
+        .andExpect(redirectedUrl("/"));
 
-    verify(videoService).create( //
-      new NewVideo( //
-        "new video", //
-        "new desc"), //
-      "user");
+    verify(videoService)
+        .create( //
+            new NewVideo( //
+                "new video", //
+                "new desc"), //
+            "user");
   }
 }

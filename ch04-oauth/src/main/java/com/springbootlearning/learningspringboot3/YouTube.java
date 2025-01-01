@@ -7,9 +7,9 @@ interface YouTube {
 
   @GetExchange("/search?part=snippet&type=video")
   SearchListResponse channelVideos( //
-    @RequestParam String channelId, //
-    @RequestParam int maxResults, //
-    @RequestParam Sort order);
+      @RequestParam String channelId, //
+      @RequestParam int maxResults, //
+      @RequestParam Sort order);
 
   enum Sort {
     DATE("date"), //

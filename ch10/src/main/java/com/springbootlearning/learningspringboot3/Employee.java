@@ -1,7 +1,6 @@
 package com.springbootlearning.learningspringboot3;
 
 import java.util.Objects;
-
 import org.springframework.data.annotation.Id;
 
 public class Employee {

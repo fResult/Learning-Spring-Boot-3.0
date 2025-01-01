@@ -32,15 +32,20 @@ public class SecurityConfig {
   @Bean
   SecurityFilterChain configureSecurity(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests() //
-      .requestMatchers("/login").permitAll() //
-      .requestMatchers("/", "/search").authenticated() //
-      .requestMatchers(HttpMethod.GET, "/api/**").authenticated() //
-      .requestMatchers(HttpMethod.POST, "/delete/**", "/new-video").authenticated() //
-      .anyRequest().denyAll() //
-      .and() //
-      .formLogin() //
-      .and() //
-      .httpBasic();
+        .requestMatchers("/login")
+        .permitAll() //
+        .requestMatchers("/", "/search")
+        .authenticated() //
+        .requestMatchers(HttpMethod.GET, "/api/**")
+        .authenticated() //
+        .requestMatchers(HttpMethod.POST, "/delete/**", "/new-video")
+        .authenticated() //
+        .anyRequest()
+        .denyAll() //
+        .and() //
+        .formLogin() //
+        .and() //
+        .httpBasic();
     return http.build();
   }
 }

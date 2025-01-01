@@ -15,9 +15,12 @@ public class HomeController {
 
   @GetMapping("/")
   String index(Model model) {
-    model.addAttribute("channelVideos", //
-      youTube.channelVideos("UCjukbYOd6pjrMpNMFAOKYyw", //
-        10, YouTube.Sort.VIEW_COUNT));
+    model.addAttribute(
+        "channelVideos", //
+        youTube.channelVideos(
+            "UCjukbYOd6pjrMpNMFAOKYyw", //
+            10,
+            YouTube.Sort.VIEW_COUNT));
     return "index";
   }
 }

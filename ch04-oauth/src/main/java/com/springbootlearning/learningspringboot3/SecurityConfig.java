@@ -14,23 +14,23 @@ public class SecurityConfig {
 
   @Bean
   public OAuth2AuthorizedClientManager clientManager( //
-    ClientRegistrationRepository clientRegRepo, //
-    OAuth2AuthorizedClientRepository authClientRepo) {
+      ClientRegistrationRepository clientRegRepo, //
+      OAuth2AuthorizedClientRepository authClientRepo) {
 
     OAuth2AuthorizedClientProvider clientProvider = //
-      OAuth2AuthorizedClientProviderBuilder.builder() //
-        .authorizationCode() //
-        .refreshToken() //
-        .clientCredentials() //
-        .password() //
-        .build();
+        OAuth2AuthorizedClientProviderBuilder.builder() //
+            .authorizationCode() //
+            .refreshToken() //
+            .clientCredentials() //
+            .password() //
+            .build();
 
     DefaultOAuth2AuthorizedClientManager clientManager = //
-      new DefaultOAuth2AuthorizedClientManager( //
-        clientRegRepo, //
-        authClientRepo);
+        new DefaultOAuth2AuthorizedClientManager( //
+            clientRegRepo, //
+            authClientRepo);
     clientManager //
-      .setAuthorizedClientProvider(clientProvider);
+        .setAuthorizedClientProvider(clientProvider);
 
     return clientManager;
   }

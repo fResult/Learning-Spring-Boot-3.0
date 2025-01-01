@@ -1,9 +1,7 @@
 package com.springbootlearning.learningspringboot3;
 
 import jakarta.annotation.PostConstruct;
-
 import java.util.List;
-
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;

@@ -13,21 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ApiController {
+  public static Map<String, Employee> DATABASE = new LinkedHashMap<>();
+
   @GetMapping("/api/employees")
   Flux<Employee> employees() {
     return Flux.just( //
-      new Employee("alice", "management"), //
-      new Employee("bob", "payroll"));
+        new Employee("alice", "management"), //
+        new Employee("bob", "payroll"));
   }
-
-  public static Map<String, Employee> DATABASE = new LinkedHashMap<>();
 
   @PostMapping("/api/employees")
   Mono<Employee> add(@RequestBody Mono<Employee> newEmployee) {
     return newEmployee //
-      .map(employee -> {
-        DATABASE.put(employee.name(), employee);
-        return employee;
-      });
+        .map(
+        employee -> {
+          DATABASE.put(employee.name(), employee);
+          return employee;
+        });
   }
 }

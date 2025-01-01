@@ -57,7 +57,18 @@ class VideoEntity {
 
   @Override
   public String toString() {
-    return "VideoEntity{" + "id=" + id + ", username='" + username + '\'' + ", name='" + name + '\'' + ", description='"
-      + description + '\'' + '}';
+    return "VideoEntity{"
+        + "id="
+        + id
+        + ", username='"
+        + username
+        + '\''
+        + ", name='"
+        + name
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + '}';
   }
 }

@@ -9,10 +9,10 @@
     <div th:text="${employee.name + ' (' + employee.role + ')'}"></div>
   </li>
 </ul>
-<form th:action="@{/new-employee}" th:object="${newEmployee}" method="post">
-  <input type="text" th:field="*{name}" />
-  <input type="text" th:field="*{role}" />
-  <input type="submit" />
+<form method="post" th:action="@{/new-employee}" th:object="${newEmployee}">
+  <input th:field="*{name}" type="text"/>
+  <input th:field="*{role}" type="text"/>
+  <input type="submit"/>
 </form>
 </body>
 </html>

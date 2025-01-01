@@ -13,14 +13,15 @@ public class CoreDomainTest {
     assertThat(entity.getUsername()).isEqualTo("alice");
     assertThat(entity.getName()).isEqualTo("title");
     assertThat(entity.getDescription()) //
-      .isEqualTo("description");
+        .isEqualTo("description");
   }
 
   @Test
   void toStringShouldAlsoBeTested() {
     VideoEntity entity = new VideoEntity("alice", "title", "description");
     assertThat(entity.toString())
-      .isEqualTo("VideoEntity{id=null, username='alice', name='title', description='description'}");
+        .isEqualTo(
+            "VideoEntity{id=null, username='alice', name='title', description='description'}");
   }
 
   @Test
@@ -34,6 +35,6 @@ public class CoreDomainTest {
     assertThat(entity.getUsername()).isEqualTo("bob");
     assertThat(entity.getName()).isEqualTo("new name");
     assertThat(entity.getDescription()) //
-      .isEqualTo("new desc");
+        .isEqualTo("new desc");
   }
 }

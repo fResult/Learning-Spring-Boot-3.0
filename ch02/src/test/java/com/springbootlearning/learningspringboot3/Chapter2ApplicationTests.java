@@ -8,5 +8,4 @@ class Chapter2ApplicationTests {
 
   @Test
   void contextLoads() {}
-
 }

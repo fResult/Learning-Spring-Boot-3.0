@@ -11,20 +11,19 @@ public class TestSecurity {
   @Bean
   public UserDetailsService userDetailsService() {
     UserDetailsManager userDetailsManager = //
-      new InMemoryUserDetailsManager();
+        new InMemoryUserDetailsManager();
     userDetailsManager.createUser( //
-      User.withDefaultPasswordEncoder() //
-        .username("user") //
-        .password("password") //
-        .roles("USER") //
-        .build());
+        User.withDefaultPasswordEncoder() //
+            .username("user") //
+            .password("password") //
+            .roles("USER") //
+            .build());
     userDetailsManager.createUser( //
-      User.withDefaultPasswordEncoder() //
-        .username("admin") //
-        .password("password") //
-        .roles("ADMIN") //
-        .build());
+        User.withDefaultPasswordEncoder() //
+            .username("admin") //
+            .password("password") //
+            .roles("ADMIN") //
+            .build());
     return userDetailsManager;
   }
-
 }

@@ -1,8 +1,6 @@
 package com.springbootlearning.learningspringboot3;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +20,5 @@ public class ItemController {
     return "redirect:/";
   }
 
-  record Item(String id, String description, Long price) {
-  }
-
+  record Item(String id, String description, Long price) {}
 }

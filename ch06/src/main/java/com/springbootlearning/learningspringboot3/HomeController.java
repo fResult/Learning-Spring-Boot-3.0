@@ -21,27 +21,30 @@ public class HomeController {
     this.appConfig = appConfig;
   }
 
-@GetMapping("/")
-public String index(Model model, //
-  Authentication authentication) {
-  model.addAttribute("videos", videoService.getVideos());
-  model.addAttribute("authentication", authentication);
-  model.addAttribute("header", appConfig.header());
-  model.addAttribute("intro", appConfig.intro());
-  return "index";
-}
+  @GetMapping("/")
+  public String index(
+      Model model, //
+      Authentication authentication) {
+    model.addAttribute("videos", videoService.getVideos());
+    model.addAttribute("authentication", authentication);
+    model.addAttribute("header", appConfig.header());
+    model.addAttribute("intro", appConfig.intro());
+    return "index";
+  }
 
   @PostMapping("/new-video")
-  public String newVideo(@ModelAttribute NewVideo newVideo, //
-    Authentication authentication) {
+  public String newVideo(
+      @ModelAttribute NewVideo newVideo, //
+      Authentication authentication) {
     videoService.create(newVideo, authentication.getName());
     return "redirect:/";
   }
 
   @PostMapping("/search")
-  public String universalSearch(@ModelAttribute Search search, //
-    Model model, //
-    Authentication authentication) {
+  public String universalSearch(
+      @ModelAttribute Search search, //
+      Model model, //
+      Authentication authentication) {
     List<VideoEntity> searchResults = videoService.search(search);
     model.addAttribute("search", search);
     model.addAttribute("videos", searchResults);

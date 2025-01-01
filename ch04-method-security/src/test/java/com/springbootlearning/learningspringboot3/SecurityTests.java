@@ -27,5 +27,4 @@ public class SecurityTests {
   void testFailure() throws Exception {
     mvc.perform(get("/admin")).andExpect(status().isForbidden());
   }
-
 }

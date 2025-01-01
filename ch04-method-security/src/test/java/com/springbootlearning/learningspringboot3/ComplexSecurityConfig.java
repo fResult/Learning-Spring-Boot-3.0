@@ -3,7 +3,6 @@ package com.springbootlearning.learningspringboot3;
 import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 
 import java.util.stream.Stream;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;

@@ -23,45 +23,45 @@ public class SecurityBasedTest {
   @Test
   void unauthUserShouldNotAccessHomePage() throws Exception {
     mvc //
-      .perform(get("/")) //
-      .andExpect(status().isUnauthorized());
+        .perform(get("/")) //
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
   @WithMockUser(username = "alice", roles = "USER")
   void authUserShouldAccessHomePage() throws Exception {
     mvc //
-      .perform(get("/")) //
-      .andExpect(status().isOk());
+        .perform(get("/")) //
+        .andExpect(status().isOk());
   }
 
   @Test
   @WithMockUser(username = "alice", roles = "ADMIN")
   void adminShouldAccessHomePage() throws Exception {
     mvc //
-      .perform(get("/")) //
-      .andExpect(status().isOk());
+        .perform(get("/")) //
+        .andExpect(status().isOk());
   }
 
   @Test
   void newVideoFromUnauthUserShouldFail() throws Exception {
     mvc.perform( //
-      post("/new-video") //
-        .param("name", "new video") //
-        .param("description", "new desc") //
-        .with(csrf())) //
-      .andExpect(status().isUnauthorized());
+            post("/new-video") //
+                .param("name", "new video") //
+                .param("description", "new desc") //
+                .with(csrf())) //
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
   @WithMockUser(username = "alice", roles = "USER")
   void newVideoFromUserShouldWork() throws Exception {
     mvc.perform( //
-      post("/new-video") //
-        .param("name", "new video") //
-        .param("description", "new desc") //
-        .with(csrf())) //
-      .andExpect(status().is3xxRedirection()) //
-      .andExpect(redirectedUrl("/"));
+            post("/new-video") //
+                .param("name", "new video") //
+                .param("description", "new desc") //
+                .with(csrf())) //
+        .andExpect(status().is3xxRedirection()) //
+        .andExpect(redirectedUrl("/"));
   }
 }
