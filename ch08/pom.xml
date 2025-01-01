@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.springbootlearning.learningspringboot3</groupId>
-	<artifactId>ch8</artifactId>
+	<artifactId>ch08</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Chapter 8</name>
 	<description>Going Native with Spring Boot</description>

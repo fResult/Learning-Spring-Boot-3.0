@@ -9,10 +9,10 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.springbootlearning.learningspringboot3</groupId>
-  <artifactId>ch4</artifactId>
+  <artifactId>ch04-method-security</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Chapter 4 (Basic)</name>
-  <description>Securing an Application with Spring Boot</description>
+  <name>Chapter 4 (Method Security)</name>
+  <description>Securing an Application with Spring Boot and Method Security</description>
   <properties>
     <java.version>17</java.version>
   </properties>

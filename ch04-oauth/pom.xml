@@ -9,10 +9,10 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.springbootlearning.learningspringboot3</groupId>
-  <artifactId>ch4-method-security</artifactId>
+  <artifactId>ch04-oauth</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Chapter 4 (Method Security)</name>
-  <description>Securing an Application with Spring Boot and Method Security</description>
+  <name>Chapter 4 (OAuth)</name>
+  <description>Securing an Application with Spring Boot and OAuth 2.0</description>
   <properties>
     <java.version>17</java.version>
   </properties>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-mustache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -35,7 +39,7 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
 
     <dependency>

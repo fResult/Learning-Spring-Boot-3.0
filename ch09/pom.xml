@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.springbootlearning.learningspringboot3</groupId>
-    <artifactId>ch9</artifactId>
+    <artifactId>ch09</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Chapter 9</name>
     <description>Writing Reactive Web Controllers</description>

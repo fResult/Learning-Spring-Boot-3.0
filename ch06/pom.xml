@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.springbootlearning.learningspringboot3</groupId>
-	<artifactId>ch5</artifactId>
+	<artifactId>ch06</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Chapter 5</name>
-	<description>Testing with Spring Boot</description>
+	<name>Chapter 6</name>
+	<description>Configuring an Application with Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 		<testcontainers.version>1.17.6</testcontainers.version>
@@ -63,6 +63,11 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
