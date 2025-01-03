@@ -1,5 +1,7 @@
 package com.springbootlearning.learningspringboot3;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,12 @@ public class HomeController {
     this.videoService = videoService;
   }
 
+  record MyVideo(String name) {}
+
   @GetMapping("/")
   public String index(Model model) {
     model.addAttribute("videos", videoService.getVideos());
+
     return "index";
   }
 
