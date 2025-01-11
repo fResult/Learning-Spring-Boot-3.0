@@ -35,6 +35,6 @@ public class HomeController {
   @PostMapping("/new-video")
   public String newVideo(@ModelAttribute Video newVideo) {
     videoService.create(newVideo);
-    return "redirect:/he";
+    return "redirect:/";
   }
 }
