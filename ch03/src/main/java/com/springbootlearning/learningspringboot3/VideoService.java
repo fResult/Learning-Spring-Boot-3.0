@@ -28,9 +28,9 @@ public class VideoService {
 
   public List<VideoEntity> search(VideoSearch videoSearch) {
     if (StringUtils.hasText(videoSearch.name()) //
-      && StringUtils.hasText(videoSearch.description())) {
-      return repository //
-        .findByNameContainsOrDescriptionContainsAllIgnoreCase( //
+        && StringUtils.hasText(videoSearch.description())) {
+
+      return repository.findByNameContainsOrDescriptionContainsAllIgnoreCase(
           videoSearch.name(), videoSearch.description());
     }
 
@@ -51,20 +51,28 @@ public class VideoService {
       probe.setName(search.value());
       probe.setDescription(search.value());
     }
-    Example<VideoEntity> example = Example.of(probe, //
-      ExampleMatcher.matchingAny() //
-        .withIgnoreCase() //
-        .withStringMatcher(StringMatcher.CONTAINING));
+    Example<VideoEntity> example =
+        Example.of(
+            probe, //
+            ExampleMatcher.matchingAny() //
+                .withIgnoreCase() //
+                .withStringMatcher(StringMatcher.CONTAINING));
     return repository.findAll(example);
   }
 
   @PostConstruct
   void initDatabase() {
-    repository.save(new VideoEntity("Need HELP with your SPRING BOOT 3 App?",
-      "SPRING BOOT 3 will only speed things up and make it super SIMPLE to serve templates and raw data."));
-    repository.save(new VideoEntity("Don't do THIS to your own CODE!",
-      "As a pro developer, never ever EVER do this to your code. Because you'll ultimately be doing it to YOURSELF!"));
-    repository.save(new VideoEntity("SECRETS to fix BROKEN CODE!",
-      "Discover ways to not only debug your code, but to regain your confidence and get back in the game as a software developer."));
+    repository.save(
+        new VideoEntity(
+            "Need HELP with your SPRING BOOT 3 App?",
+            "SPRING BOOT 3 will only speed things up and make it super SIMPLE to serve templates and raw data."));
+    repository.save(
+        new VideoEntity(
+            "Don't do THIS to your own CODE!",
+            "As a pro developer, never ever EVER do this to your code. Because you'll ultimately be doing it to YOURSELF!"));
+    repository.save(
+        new VideoEntity(
+            "SECRETS to fix BROKEN CODE!",
+            "Discover ways to not only debug your code, but to regain your confidence and get back in the game as a software developer."));
   }
 }

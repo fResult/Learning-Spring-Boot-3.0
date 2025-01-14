@@ -29,11 +29,8 @@ public class HomeController {
   }
 
   @PostMapping("/multi-field-search")
-  public String multiFieldSearch( //
-    @ModelAttribute VideoSearch search, //
-    Model model) {
-    List<VideoEntity> searchResults = //
-      videoService.search(search);
+  public String multiFieldSearch(@ModelAttribute VideoSearch search, Model model) {
+    List<VideoEntity> searchResults = videoService.search(search);
     model.addAttribute("videos", searchResults);
     return "index";
   }
