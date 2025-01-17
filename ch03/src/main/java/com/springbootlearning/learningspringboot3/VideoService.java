@@ -47,15 +47,13 @@ public class VideoService {
 
   public List<VideoEntity> search(UniversalSearch search) {
     VideoEntity probe = new VideoEntity();
-    if (StringUtils.hasText(search.value())) {
-      probe.setName(search.value());
-      probe.setDescription(search.value());
-    }
-    Example<VideoEntity> example =
+    if (StringUtils.hasText(search.value()))
+      probe = new VideoEntity(search.value(), search.value());
+    final var example =
         Example.of(
-            probe, //
-            ExampleMatcher.matchingAny() //
-                .withIgnoreCase() //
+            probe,
+            ExampleMatcher.matchingAny()
+                .withIgnoreCase()
                 .withStringMatcher(StringMatcher.CONTAINING));
     return repository.findAll(example);
   }
