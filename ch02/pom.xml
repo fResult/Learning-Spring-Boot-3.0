@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.springbootlearning.learningspringboot3</groupId>
     <artifactId>ch02</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Chapter 2</name>
     <description>Creating a Web Application with Spring Boot</description>
     <properties>
