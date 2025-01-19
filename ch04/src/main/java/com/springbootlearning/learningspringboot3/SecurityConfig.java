@@ -1,5 +1,6 @@
 package com.springbootlearning.learningspringboot3;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
@@ -13,6 +14,14 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CommandLineRunner initUsers(UserManagementRepository repository) {
+    return (_) -> {
+      repository.save(new UserAccount("user", "password", "ROLE_USER"));
+      repository.save(new UserAccount("admin", "password", "ROLE_ADMIN"));
+    };
   }
 
   @Bean
