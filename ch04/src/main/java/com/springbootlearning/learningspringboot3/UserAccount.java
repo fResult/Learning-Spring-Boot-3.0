@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.function.Function;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class UserAccount {
@@ -15,9 +17,7 @@ public class UserAccount {
   private String password;
 
   @ElementCollection(fetch = FetchType.EAGER)
-  private List<GrantedAuthority> authorities = new ArrayList<>();
-
-  public UserAccount() {}
+  private List<GrantedAuthority> authorities;
 
   public UserAccount(String username, String password, String... authorities) {
     this.username = username;
@@ -26,5 +26,13 @@ public class UserAccount {
         Arrays.stream(authorities)
             .map((Function<String, GrantedAuthority>) SimpleGrantedAuthority::new)
             .toList();
+  }
+
+  public UserDetails asUser() {
+    return User.withDefaultPasswordEncoder()
+        .username(username)
+        .password(password)
+        .authorities(authorities)
+        .build();
   }
 }
