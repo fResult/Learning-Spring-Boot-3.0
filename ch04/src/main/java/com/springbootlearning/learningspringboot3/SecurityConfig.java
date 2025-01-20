@@ -3,11 +3,9 @@ package com.springbootlearning.learningspringboot3;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 public class SecurityConfig {
@@ -18,29 +16,17 @@ public class SecurityConfig {
 
   @Bean
   public CommandLineRunner initUsers(UserManagementRepository repository) {
-    return (_) -> {
-      repository.save(new UserAccount("user", "password", "ROLE_USER"));
-      repository.save(new UserAccount("admin", "password", "ROLE_ADMIN"));
+    return (args) -> {
+      repository.save(new UserAccount("user", "password", "USER"));
+      repository.save(new UserAccount("admin", "password", "ADMIN"));
     };
   }
 
   @Bean
-  public UserDetailsService userDetailsService() {
-    final var userDetailsManager = new InMemoryUserDetailsManager();
-    userDetailsManager.createUser(
-        User.builder()
-            .username("user")
-            .password(passwordEncoder().encode("password"))
-            .roles("USER")
-            .build());
+  public UserDetailsService userService(UserRepository userRepository) {
+    return username -> userRepository.findByUsername(username).asUser(passwordEncoder());
+  }
 
-    userDetailsManager.createUser(
-        User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("password"))
-            .roles("ADMIN")
-            .build());
 
-    return userDetailsManager;
   }
 }
