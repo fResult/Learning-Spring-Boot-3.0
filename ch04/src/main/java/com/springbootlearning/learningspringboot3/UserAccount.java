@@ -3,7 +3,6 @@ package com.springbootlearning.learningspringboot3;
 import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -25,9 +24,7 @@ public class UserAccount {
     this.username = username;
     this.password = password;
     this.authorities =
-        Arrays.stream(authorities)
-            .map((Function<String, GrantedAuthority>) SimpleGrantedAuthority::new)
-            .toList();
+        Arrays.stream(authorities).map(this::toGrantedAuthorityWithRolePrefix).toList();
   }
 
   public Long getId() {
@@ -65,5 +62,9 @@ public class UserAccount {
         + ", authorities="
         + authorities
         + "}";
+  }
+
+  private GrantedAuthority toGrantedAuthorityWithRolePrefix(String role) {
+    return new SimpleGrantedAuthority("ROLE_" + role);
   }
 }
