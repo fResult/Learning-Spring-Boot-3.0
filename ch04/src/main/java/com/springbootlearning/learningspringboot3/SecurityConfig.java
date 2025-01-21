@@ -3,6 +3,7 @@ package com.springbootlearning.learningspringboot3;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +19,7 @@ public class SecurityConfig {
 
   @Bean
   public CommandLineRunner initUsers(UserManagementRepository repository) {
-    return (args) -> {
+    return args -> {
       repository.save(new UserAccount("user", "password", "USER"));
       repository.save(new UserAccount("admin", "password", "ADMIN"));
     };
@@ -30,12 +31,23 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity httpSecurity)
-      throws Exception {
-
-    httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
-    httpSecurity.formLogin();
-    httpSecurity.httpBasic();
+  SecurityFilterChain configureSecurity(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity
+        .authorizeHttpRequests()
+        .requestMatchers("/login")
+        .permitAll()
+        .requestMatchers("/", "/search")
+        .authenticated()
+        .requestMatchers(HttpMethod.GET, "/api/**")
+        .authenticated()
+        .requestMatchers(HttpMethod.POST, "/new-video", "/api/**")
+        .hasRole("ADMIN")
+        .anyRequest()
+        .denyAll()
+        .and()
+        .formLogin()
+        .and()
+        .httpBasic();
 
     return httpSecurity.build();
   }
