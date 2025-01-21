@@ -20,8 +20,8 @@ public class SecurityConfig {
   @Bean
   public CommandLineRunner initUsers(UserManagementRepository repository) {
     return args -> {
-      repository.save(new UserAccount("user", "password", "USER"));
-      repository.save(new UserAccount("admin", "password", "ADMIN"));
+      repository.save(new UserAccount("user", "password", "ROLE_USER"));
+      repository.save(new UserAccount("admin", "password", "ROLE_ADMIN"));
     };
   }
 
