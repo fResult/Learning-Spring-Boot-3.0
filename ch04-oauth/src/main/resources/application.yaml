@@ -17,8 +17,8 @@ spring:
       client:
         registration:
           google:
-            clientId: **your client id**
-            clientSecret: **your client secret**
+            clientId: ${GOOGLE_CLIENT_SECRET:DUMMY}
+            clientSecret: ${GOOGLE_CLIENT_SECRET:DUMMY}
             scope: openid,profile,email,https://www.googleapis.com/auth/youtube
 
 logging:
