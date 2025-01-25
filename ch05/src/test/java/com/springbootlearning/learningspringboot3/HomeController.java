@@ -2,9 +2,11 @@ package com.springbootlearning.learningspringboot3;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(HomeController.class)
 class HomeControllerTest {
-  @Autowired MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @MockBean VideoService videoService;
+  @MockBean private VideoService videoService;
 
   @Test
   @WithMockUser
@@ -33,6 +35,21 @@ class HomeControllerTest {
             .getContentAsString();
 
     assertThat(html)
-        .contains("<form action=\"/logout\"", "<form action=\"/search\"", "<form action=\"/new-video\"");
+        .contains(
+            "<form action=\"/logout\"", "<form action=\"/search\"", "<form action=\"/new-video\"");
+  }
+
+  @Test
+  @WithMockUser
+  void postNewVideoShouldWork() throws Exception {
+    mockMvc
+        .perform(
+            post("/new-video")
+                .param("name", "new video")
+                .param("description", "description")
+                .with(csrf()))
+        .andExpect(redirectedUrl("/"));
+
+    verify(videoService).create(new NewVideo("new video", "description"), "user");
   }
 }
