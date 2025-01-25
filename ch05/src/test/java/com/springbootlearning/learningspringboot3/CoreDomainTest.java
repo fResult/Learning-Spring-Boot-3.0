@@ -15,6 +15,15 @@ class CoreDomainTest {
   }
 
   @Test
+  void newVideoWithoutArgsShouldBeNullAllFields() {
+    final var video = new VideoEntity();
+    assertThat(video.getId()).isNull();
+    assertThat(video.getUsername()).isNull();
+    assertThat(video.getName()).isNull();
+    assertThat(video.getDescription()).isNull();
+  }
+
+  @Test
   void toStringShouldAlsoBeTested() {
     final var video = new VideoEntity("Alice", "title", "description");
     assertThat(video.toString()).isEqualTo("VideoEntity{id=null, username='Alice', name='title', description='description'}");
