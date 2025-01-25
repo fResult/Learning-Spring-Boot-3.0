@@ -13,4 +13,10 @@ class CoreDomainTest {
     assertThat(video.getName()).isEqualTo("title");
     assertThat(video.getDescription()).isEqualTo("description");
   }
+
+  @Test
+  void toStringShouldAlsoBeTested() {
+    final var video = new VideoEntity("Alice", "title", "description");
+    assertThat(video.toString()).isEqualTo("VideoEntity{id=null, username='Alice', name='title', description='description'}");
+  }
 }
