@@ -1,6 +1,8 @@
 package com.springbootlearning.learningspringboot3;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -33,5 +35,22 @@ class VideoServiceTest {
 
     // Then
     assertThat(videos).containsExactly(video1, video2);
+  }
+
+  @Test
+  void creatingNewVideoShouldReturnSameDataWithId() {
+    // Given
+    final var newVideo = new NewVideo("video 1", "description");
+    final var videoToCreate = new VideoEntity("alice", "video 1", "description");
+    videoToCreate.setId(1L);
+    given(videoRepository.saveAndFlush(any(VideoEntity.class))).willReturn(videoToCreate);
+
+    // When
+    final var actualCreatedVideo = videoService.create(newVideo, "alice");
+
+    // Then
+    assertThat(actualCreatedVideo.getName()).isEqualTo("video 1");
+    assertThat(actualCreatedVideo.getUsername()).isEqualTo("alice");
+    assertThat(actualCreatedVideo.getDescription()).isEqualTo("description");
   }
 }
