@@ -55,6 +55,21 @@ class HomeControllerTest {
 
   @Test
   @WithMockUser
+  void searchVideosShouldWork() throws Exception {
+    final var keyword = "my video";
+    mockMvc
+        .perform(
+            post("/search")
+                .param("value", keyword)
+                .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString(String.format("Searching: %s", keyword))));
+
+    verify(videoService).search(new Search(keyword));
+  }
+
+  @Test
+  @WithMockUser
   void deleteVideoShouldWork() throws Exception {
     var videoId = 123L;
     mockMvc.perform(post("/delete/videos/{videoId}", videoId).with(csrf())).andExpect(redirectedUrl("/"));
