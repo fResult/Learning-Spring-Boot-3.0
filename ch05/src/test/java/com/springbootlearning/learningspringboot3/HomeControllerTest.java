@@ -52,4 +52,13 @@ class HomeControllerTest {
 
     verify(videoService).create(new NewVideo("new video", "description"), "user");
   }
+
+  @Test
+  @WithMockUser
+  void deleteVideoShouldWork() throws Exception {
+    var videoId = 123L;
+    mockMvc.perform(post("/delete/videos/{videoId}", videoId).with(csrf())).andExpect(redirectedUrl("/"));
+
+    verify(videoService).delete(videoId);
+  }
 }
