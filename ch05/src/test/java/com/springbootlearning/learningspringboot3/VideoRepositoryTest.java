@@ -38,4 +38,14 @@ class VideoRepositoryTest {
     // Then
     assertThat(videos).hasSize(3);
   }
+
+  @Test
+  void findByNameShouldRetrieveOneEntry() {
+    final var videos = videoRepository.findByNameContainsIgnoreCase("Spring BOOT 3");
+
+    assertThat(videos).hasSize(1);
+    assertThat(videos)
+        .extracting(VideoEntity::getName)
+        .containsExactlyInAnyOrder("Need HELP with your SPRING BOOT 3 App?");
+  }
 }
