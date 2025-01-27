@@ -48,4 +48,17 @@ class VideoRepositoryTest {
         .extracting(VideoEntity::getName)
         .containsExactlyInAnyOrder("Need HELP with your SPRING BOOT 3 App?");
   }
+
+  @Test
+  void findByNameOrDescriptionShouldFindTwo() {
+    final var videos =
+        videoRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase("cOdE", "YOUR code");
+
+    assertThat(videos).hasSize(2);
+    assertThat(videos)
+        .extracting(VideoEntity::getDescription)
+        .contains(
+            "Discover ways to not only debug your code",
+            "As a pro developer, never ever EVER do this to your code.");
+  }
 }
