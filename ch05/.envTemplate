@@ -1,0 +1,8 @@
+# Leave `DOCKER_HOST` empty if you are using the default Docker daemon (e.g., Docker Desktop)
+# Use `DOCKER_HOST=unix:///Users/<username>/.colima/default/docker.sock` if you are using Colima
+DOCKER_HOST=
+
+# Use `/Users/<username>/.colima/default/docker.sock` if you are using Colima
+TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+
+TESTCONTAINERS_RYUK_DISABLED=true
