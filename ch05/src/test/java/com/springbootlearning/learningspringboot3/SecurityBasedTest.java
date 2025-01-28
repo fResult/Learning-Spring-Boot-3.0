@@ -26,4 +26,10 @@ class SecurityBasedTest {
   void authUserShouldAccessHomePage() throws Exception {
     mockMvc.perform(get("/")).andExpect(status().isOk());
   }
+
+  @Test
+  @WithMockUser(username = "admin", roles = "ADMIN")
+  void authAdminShouldAccessHomePage() throws Exception {
+    mockMvc.perform(get("/")).andExpect(status().isOk());
+  }
 }
