@@ -1,8 +1,12 @@
 package com.springbootlearning.learningspringboot3;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.postgresql.hostchooser.HostRequirement.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -44,5 +48,20 @@ class SecurityBasedTest {
                 .param("description", "new desc")
                 .with(csrf()))
         .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockUser(username = "alice", roles = "USER")
+  void newVideoFromAuthUserShouldWork() throws Exception {
+    mockMvc
+        .perform(
+            post("/new-video")
+                .param("name", "New Video")
+                .param("description", "new desc")
+                .with(csrf()))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/"));
+
+    verify(videoService).create(any(NewVideo.class), eq("alice"));
   }
 }
