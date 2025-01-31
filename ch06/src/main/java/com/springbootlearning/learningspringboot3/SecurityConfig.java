@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
-import org.springframework.lang.NonNull;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,13 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
   @Bean
   @ConfigurationPropertiesBinding
-  Converter<String, GrantedAuthority> grantedAuthorityConverter() {
-    return new Converter<>() {
-      @Override
-      public GrantedAuthority convert(@NonNull String source) {
-        return new SimpleGrantedAuthority(source);
-      }
-    };
+  GrantedAuthorityConverter grantedAuthorityConverter() {
+    return SimpleGrantedAuthority::new;
   }
 
   @Bean
@@ -58,5 +52,5 @@ public class SecurityConfig {
     return http.build();
   }
 
-  interface GrantedAuthorityCnv extends Converter<String, GrantedAuthority> {}
+  interface GrantedAuthorityConverter extends Converter<String, GrantedAuthority> {}
 }
