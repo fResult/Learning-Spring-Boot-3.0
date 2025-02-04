@@ -5,28 +5,25 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.function.Function;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 public class UserAccount {
-
   @Id @GeneratedValue //
   private Long id;
   private String username;
   private String password;
 
-  @ElementCollection(fetch = FetchType.EAGER) //
-  private List<GrantedAuthority> authorities = //
-      new ArrayList<>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<GrantedAuthority> authorities;
 
   protected UserAccount() {}
 
@@ -34,18 +31,9 @@ public class UserAccount {
     this.username = username;
     this.password = password;
     this.authorities =
-        Arrays.stream(authorities) //
-            .map(SimpleGrantedAuthority::new) //
-            .map(GrantedAuthority.class::cast) //
+        Arrays.stream(authorities)
+            .map((Function<String, GrantedAuthority>) SimpleGrantedAuthority::new)
             .toList();
-  }
-
-  public UserDetails asUser() {
-    return User.withDefaultPasswordEncoder() //
-        .username(getUsername()) //
-        .password(getPassword()) //
-        .authorities(getAuthorities()) //
-        .build();
   }
 
   public Long getId() {
@@ -60,27 +48,19 @@ public class UserAccount {
     return username;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   public List<GrantedAuthority> getAuthorities() {
-    if (authorities == null) {
-      this.authorities = new ArrayList<>();
-    }
     return authorities;
   }
 
-  public void setAuthorities(List<GrantedAuthority> authorities) {
-    this.authorities = authorities;
+  public UserDetails asUser(PasswordEncoder passwordEncoder) {
+    return User.withUsername(username)
+        .password(passwordEncoder.encode(password))
+        .authorities(authorities)
+        .build();
   }
 
   @Override

@@ -8,11 +8,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
   @Bean
   @Profile("setup")
@@ -25,8 +31,8 @@ public class SecurityConfig {
   }
 
   @Bean
-  UserDetailsService userService(UserRepository repo) {
-    return username -> repo.findByUsername(username).asUser();
+  public UserDetailsService userService(UserRepository userRepository) {
+    return username -> userRepository.findByUsername(username).asUser(passwordEncoder());
   }
 
   @Bean
