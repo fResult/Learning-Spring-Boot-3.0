@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Chapter9Application {
-
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     SpringApplication.run(Chapter9Application.class, args);
   }
 }
