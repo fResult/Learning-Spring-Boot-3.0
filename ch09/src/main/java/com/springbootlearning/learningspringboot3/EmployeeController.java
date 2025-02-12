@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -20,5 +21,14 @@ public class EmployeeController {
   @GetMapping
   Flux<Employee> employees() {
     return Flux.fromIterable(DATABASE.values());
+  }
+
+  @PostMapping
+  public Mono<Employee> newEmployee(@RequestBody Mono<Employee> newEmployee) {
+    return newEmployee.map(
+        employee -> {
+          DATABASE.put(employee.name(), employee);
+          return employee;
+        });
   }
 }
