@@ -30,11 +30,10 @@ public class EmployeeController {
   }
 
   @PostMapping
-  public Mono<Employee> newEmployee(@RequestBody Mono<Employee> newEmployee) {
-    return newEmployee.map(
-        employee -> {
-          DATABASE.put(employee.name(), employee);
-          return employee;
-        });
+  public Mono<Employee> newEmployee(@RequestBody Mono<Employee> body) {
+    return body.map(
+            employee ->
+                new Employee(idGenerator.incrementAndGet(), employee.name(), employee.role()))
+        .doOnNext(employee -> DATABASE.put(employee.name(), employee));
   }
 }
