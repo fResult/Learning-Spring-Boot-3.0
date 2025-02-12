@@ -31,9 +31,14 @@ public class EmployeeController {
 
   @PostMapping
   public Mono<Employee> newEmployee(@RequestBody Mono<Employee> body) {
-    return body.map(
-            employee ->
-                new Employee(idGenerator.incrementAndGet(), employee.name(), employee.role()))
-        .doOnNext(employee -> DATABASE.put(employee.name(), employee));
+    return body.map(this::buildEmployeeToCreate).doOnNext(this::saveEmployee);
+  }
+
+  private Employee buildEmployeeToCreate(Employee newEmployee) {
+    return new Employee(idGenerator.incrementAndGet(), newEmployee.name(), newEmployee.role());
+  }
+
+  private void saveEmployee(Employee employee) {
+    DATABASE.put(employee.name(), employee);
   }
 }
