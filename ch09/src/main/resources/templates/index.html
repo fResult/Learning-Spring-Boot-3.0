@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Writing a Reactive Web Controller</title>
+</head>
+<body>
+<h2>Employees</h2>
+<ul>
+  <li th:each="employee : ${employees}">
+    <p
+        th:text="${employee.name + ' (' + employee.role + ')'}">
+    </p>
+  </li>
+</ul>
+</body>
+</html>
