@@ -1,7 +1,7 @@
-package com.springbootlearning.learningspringboot3;
+package com.springbootlearning.learningspringboot3.controllers;
 
 import com.springbootlearning.learningspringboot3.entities.Employee;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +12,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/employees")
 public class EmployeeController {
   private final AtomicLong idGenerator;
+  // Note: This is a simple in-memory database.
   private final Map<String, Employee> DATABASE =
-      new HashMap<>() {
+      new LinkedHashMap<>() {
         {
           put("alice", new Employee(1L, "alice", "burglar"));
           put("bob", new Employee(2L, "bob", "ring-bearer"));
