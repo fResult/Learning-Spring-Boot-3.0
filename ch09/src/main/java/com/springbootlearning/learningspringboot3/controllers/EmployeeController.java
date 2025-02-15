@@ -16,8 +16,9 @@ public class EmployeeController {
   private final Map<String, Employee> DATABASE =
       new LinkedHashMap<>() {
         {
-          put("alice", new Employee(1L, "alice", "burglar"));
-          put("bob", new Employee(2L, "bob", "ring-bearer"));
+          put("Frodo Baggins", new Employee(1L, "alice", "burglar"));
+          put("Samwise Gamgee", new Employee(2L, "bob", "ring-bearer"));
+          put("Bilbo Baggins", new Employee(3L, "Bilbo Baggins", "burglar"));
         }
       };
 
