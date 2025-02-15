@@ -18,8 +18,9 @@ public class HomeController {
   private static final Map<String, Employee> DATABASE =
       new HashMap<>() {
         {
-          put("alice", new Employee(1L, "alice", "burglar"));
-          put("bob", new Employee(2L, "bob", "ring-bearer"));
+          put("Frodo Baggins", new Employee(1L, "Frodo Baggins", "Ring-bearer"));
+          put("Samwise Gamgee", new Employee(2L, "Samwise Gamgee", "Gardener"));
+          put("Bilbo Baggins", new Employee(3L, "Bilbo Baggins", "Burglar"));
         }
       };
 
@@ -37,7 +38,7 @@ public class HomeController {
 
   @PostMapping("/new-employee")
   Mono<String> newEmployee(@ModelAttribute Mono<Employee> newEmployee) {
-    return newEmployee.doOnNext(this::saveEmployee).map(employee -> "redirect:/");
+    return newEmployee.doOnNext(this::saveEmployee).thenReturn("redirect:/");
   }
 
   private void saveEmployee(Employee employee) {
