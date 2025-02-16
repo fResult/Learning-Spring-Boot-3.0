@@ -13,6 +13,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -30,7 +31,14 @@ public class HypermediaController {
 
   @GetMapping
   public Mono<CollectionModel<EntityModel<Employee>>> allEmployees() {
-    return null;
+    final var selfLinkMono =
+        linkTo(methodOn(this.getClass()).allEmployees()).withSelfRel().toMono();
+
+    return selfLinkMono.flatMap(
+        selfLink -> Flux.fromIterable(DATABASE.keySet())
+            .flatMap(this::employeeById)
+            .collectList()
+            .map(employeeEntityModels -> CollectionModel.of(employeeEntityModels, selfLink)));
   }
 
   @GetMapping("/{id}")
