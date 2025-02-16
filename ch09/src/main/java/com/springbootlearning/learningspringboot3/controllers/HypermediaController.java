@@ -8,10 +8,8 @@ import com.springbootlearning.learningspringboot3.entities.Employee;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -52,7 +50,7 @@ public class HypermediaController {
     final var aggregateRootLinkMono =
         linkTo(methodOn(this.getClass()).allEmployees()).withRel("employees").toMono();
 
-    return Mono.zip(selfLinkMono, aggregateRootLinkMono).map(toEmployeeEntityModelMono(id));
+    return Mono.zip(selfLinkMono, aggregateRootLinkMono).flatMap(toEmployeeEntityModelMono(id));
   }
 
   private Mono<CollectionModel<EntityModel<Employee>>> toEmployeeEntityModelCollectionMono(
@@ -67,17 +65,21 @@ public class HypermediaController {
         .map(toEntityModelCollection);
   }
 
-  private Function<Tuple2<Link, Link>, EntityModel<Employee>> toEmployeeEntityModelMono(Long id) {
+  private Function<Tuple2<Link, Link>, Mono<EntityModel<Employee>>> toEmployeeEntityModelMono(
+      Long id) {
 
-    Supplier<ResponseStatusException> throw404IfNotFound =
-        () ->
+    final var notfoundErrorMono =
+        Mono.<Employee>error(
             new ResponseStatusException(
-                HttpStatus.NOT_FOUND, String.format("Employee with ID %d not found", id));
+                HttpStatus.NOT_FOUND, String.format("Employee with ID %d not found", id)));
 
-    return linksTuple ->
-        EntityModel.of(
-            Optional.of(DATABASE.get(id)).orElseThrow(throw404IfNotFound),
-            linksTuple.getT1(),
-            linksTuple.getT2());
+    return linksTuple -> {
+      final var employeeMono = Mono.just(DATABASE.get(id)).switchIfEmpty(notfoundErrorMono);
+
+      final Function<Employee, EntityModel<Employee>> toEntityModel =
+          employee -> EntityModel.of(employee, linksTuple.getT1(), linksTuple.getT2());
+
+      return employeeMono.map(toEntityModel);
+    };
   }
 }
