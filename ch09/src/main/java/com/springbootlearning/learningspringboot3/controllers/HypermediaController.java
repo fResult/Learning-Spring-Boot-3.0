@@ -1,5 +1,6 @@
 package com.springbootlearning.learningspringboot3.controllers;
 
+import static org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.methodOn;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +20,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/hypermedia/employees")
+@EnableHypermediaSupport(type = HypermediaType.HAL)
 public class HypermediaController {
   private final Map<Long, Employee> DATABASE =
       new HashMap<>() {
