@@ -6,11 +6,14 @@ import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.met
 
 import com.springbootlearning.learningspringboot3.entities.Employee;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,11 +40,7 @@ public class HypermediaController {
     final var selfLinkMono =
         linkTo(methodOn(this.getClass()).allEmployees()).withSelfRel().toMono();
 
-    return selfLinkMono.flatMap(
-        selfLink -> Flux.fromIterable(DATABASE.keySet())
-            .flatMap(this::employeeById)
-            .collectList()
-            .map(employeeEntityModels -> CollectionModel.of(employeeEntityModels, selfLink)));
+    return selfLinkMono.flatMap(this::toEmployeeEntityModelCollectionMono);
   }
 
   @GetMapping("/{id}")
@@ -63,5 +62,17 @@ public class HypermediaController {
                                     String.format("Employee with ID %d not found", id))),
                     linksTuple.getT1(),
                     linksTuple.getT2()));
+  }
+
+  private Mono<CollectionModel<EntityModel<Employee>>> toEmployeeEntityModelCollectionMono(
+      Link link) {
+
+    final Function<List<EntityModel<Employee>>, CollectionModel<EntityModel<Employee>>>
+        toEntityModelCollection = entityModels -> CollectionModel.of(entityModels, link);
+
+    return Flux.fromIterable(DATABASE.keySet())
+        .flatMap(this::employeeById)
+        .collectList()
+        .map(toEntityModelCollection);
   }
 }
