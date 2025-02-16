@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,19 @@ public class HypermediaController {
       };
   private AtomicLong idGenerator = new AtomicLong(DATABASE.size());
 
+  @GetMapping
+  public Mono<CollectionModel<EntityModel<Employee>>> allEmployees() {
+    return null;
+  }
+
   @GetMapping("/{id}")
   public Mono<EntityModel<Employee>> employeeById(@PathVariable Long id) {
     final var selfLinkMono =
-        linkTo(methodOn(HypermediaController.class).employeeById(id)).withSelfRel().toMono();
+        linkTo(methodOn(this.getClass()).employeeById(id)).withSelfRel().toMono();
+    final var aggregateRootLinkMono = linkTo(methodOn(this.getClass()).allEmployees()).withRel("employees").toMono();
 
-    return selfLinkMono.map(
-        selfLink ->
+    return Mono.zip(selfLinkMono, aggregateRootLinkMono).map(
+        linksTuple ->
             EntityModel.of(
                 Optional.of(DATABASE.get(id))
                     .orElseThrow(
@@ -41,6 +48,6 @@ public class HypermediaController {
                             new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 String.format("Employee with ID %d not found", id))),
-                selfLink));
+                linksTuple.getT1(), linksTuple.getT2()));
   }
 }
