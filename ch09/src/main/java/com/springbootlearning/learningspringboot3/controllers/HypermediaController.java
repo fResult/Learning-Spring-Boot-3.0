@@ -37,17 +37,20 @@ public class HypermediaController {
   public Mono<EntityModel<Employee>> employeeById(@PathVariable Long id) {
     final var selfLinkMono =
         linkTo(methodOn(this.getClass()).employeeById(id)).withSelfRel().toMono();
-    final var aggregateRootLinkMono = linkTo(methodOn(this.getClass()).allEmployees()).withRel("employees").toMono();
+    final var aggregateRootLinkMono =
+        linkTo(methodOn(this.getClass()).allEmployees()).withRel("employees").toMono();
 
-    return Mono.zip(selfLinkMono, aggregateRootLinkMono).map(
-        linksTuple ->
-            EntityModel.of(
-                Optional.of(DATABASE.get(id))
-                    .orElseThrow(
-                        () ->
-                            new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                String.format("Employee with ID %d not found", id))),
-                linksTuple.getT1(), linksTuple.getT2()));
+    return Mono.zip(selfLinkMono, aggregateRootLinkMono)
+        .map(
+            linksTuple ->
+                EntityModel.of(
+                    Optional.of(DATABASE.get(id))
+                        .orElseThrow(
+                            () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    String.format("Employee with ID %d not found", id))),
+                    linksTuple.getT1(),
+                    linksTuple.getT2()));
   }
 }
