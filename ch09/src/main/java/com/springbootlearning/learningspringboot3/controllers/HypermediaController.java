@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 @RestController
 @RequestMapping("/hypermedia/employees")
@@ -50,18 +52,7 @@ public class HypermediaController {
     final var aggregateRootLinkMono =
         linkTo(methodOn(this.getClass()).allEmployees()).withRel("employees").toMono();
 
-    return Mono.zip(selfLinkMono, aggregateRootLinkMono)
-        .map(
-            linksTuple ->
-                EntityModel.of(
-                    Optional.of(DATABASE.get(id))
-                        .orElseThrow(
-                            () ->
-                                new ResponseStatusException(
-                                    HttpStatus.NOT_FOUND,
-                                    String.format("Employee with ID %d not found", id))),
-                    linksTuple.getT1(),
-                    linksTuple.getT2()));
+    return Mono.zip(selfLinkMono, aggregateRootLinkMono).map(toEmployeeEntityModelMono(id));
   }
 
   private Mono<CollectionModel<EntityModel<Employee>>> toEmployeeEntityModelCollectionMono(
@@ -74,5 +65,19 @@ public class HypermediaController {
         .flatMap(this::employeeById)
         .collectList()
         .map(toEntityModelCollection);
+  }
+
+  private Function<Tuple2<Link, Link>, EntityModel<Employee>> toEmployeeEntityModelMono(Long id) {
+
+    Supplier<ResponseStatusException> throw404IfNotFound =
+        () ->
+            new ResponseStatusException(
+                HttpStatus.NOT_FOUND, String.format("Employee with ID %d not found", id));
+
+    return linksTuple ->
+        EntityModel.of(
+            Optional.of(DATABASE.get(id)).orElseThrow(throw404IfNotFound),
+            linksTuple.getT1(),
+            linksTuple.getT2());
   }
 }
