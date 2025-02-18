@@ -2,9 +2,11 @@ package com.springbootlearning.learningspringboot3.controllers;
 
 import com.springbootlearning.learningspringboot3.entities.Employee;
 import com.springbootlearning.learningspringboot3.repositories.EmployeeRepository;
+import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -29,5 +31,16 @@ public class EmployeeController {
         .findById(id)
         .map(ResponseEntity::ok)
         .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+  }
+
+  @PostMapping
+  public Mono<ResponseEntity<Employee>> create(Mono<Employee> body) {
+    return body.flatMap(this.employeeRepository::save)
+        .map(this::toCreatedResponseEntity);
+  }
+
+  private ResponseEntity<Employee> toCreatedResponseEntity(Employee createdResource) {
+    return ResponseEntity.created(URI.create("/api/employees/" + createdResource.id()))
+        .body(createdResource);
   }
 }
