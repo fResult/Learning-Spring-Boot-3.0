@@ -6,6 +6,7 @@ import com.springbootlearning.learningspringboot3.repositories.EmployeeRepositor
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -43,14 +44,7 @@ public class EmployeeController {
 
     return employeeRepository
         .findById(id)
-        .flatMap(
-            existingEmployee ->
-                bodyMono.map(
-                    body ->
-                        new Employee(
-                            id,
-                            Optional.of(body.name()).orElse(existingEmployee.name()),
-                            Optional.of(body.role()).orElse(existingEmployee.role()))))
+        .flatMap(existingEmployee -> bodyMono.map(this.toEmployeeToUpdate(existingEmployee)))
         .flatMap(employeeRepository::save)
         .map(ResponseEntity::ok)
         .switchIfEmpty(respondNotFoundMono());
@@ -59,6 +53,14 @@ public class EmployeeController {
   private ResponseEntity<Employee> toCreatedResponseEntity(Employee createdResource) {
     return ResponseEntity.created(URI.create("/api/employees/" + createdResource.id()))
         .body(createdResource);
+  }
+
+  private Function<EmployeeUpdateRequest, Employee> toEmployeeToUpdate(Employee existingEmployee) {
+    return body ->
+        new Employee(
+            existingEmployee.id(),
+            Optional.ofNullable(body.name()).orElse(existingEmployee.name()),
+            Optional.ofNullable(body.role()).orElse(existingEmployee.role()));
   }
 
   private Mono<ResponseEntity<Employee>> respondNotFoundMono() {
