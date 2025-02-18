@@ -44,7 +44,7 @@ public class EmployeeController {
 
     return employeeRepository
         .findById(id)
-        .flatMap(existingEmployee -> bodyMono.map(this.toEmployeeToUpdate(existingEmployee)))
+        .flatMap(existingEmployee -> bodyMono.map(toEmployeeToUpdate(existingEmployee)))
         .flatMap(employeeRepository::save)
         .map(ResponseEntity::ok)
         .switchIfEmpty(respondNotFoundMono());

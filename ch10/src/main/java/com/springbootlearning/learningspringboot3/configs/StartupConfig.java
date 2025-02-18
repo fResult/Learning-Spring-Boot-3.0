@@ -1,6 +1,7 @@
 package com.springbootlearning.learningspringboot3.configs;
 
 import com.springbootlearning.learningspringboot3.entities.Employee;
+import java.util.function.Consumer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,26 +23,20 @@ public class StartupConfig {
           .expectNextCount(1)
           .verifyComplete();
 
-      template
-          .insert(Employee.class)
-          .using(new Employee("Frodo", "ring bearer"))
-          .then()
-          .as(StepVerifier::create)
-          .verifyComplete();
-
-      template
-          .insert(Employee.class)
-          .using(new Employee("Bilbo", "burglar"))
-          .then()
-          .as(StepVerifier::create)
-          .verifyComplete();
-
-      template
-          .insert(Employee.class)
-          .using(new Employee("Gandalf", "wizard"))
-          .then()
-          .as(StepVerifier::create)
-          .verifyComplete();
+      final var insertEmployeeToTable = insertEmployee(template);
+      insertEmployeeToTable.accept(new Employee("Frodo", "ring bearer"));
+      insertEmployeeToTable.accept(new Employee("Bilbo", "burglar"));
+      insertEmployeeToTable.accept(new Employee("Gandalf", "wizard"));
     };
+  }
+
+  private Consumer<Employee> insertEmployee(R2dbcEntityTemplate template) {
+    return employee ->
+        template
+            .insert(Employee.class)
+            .using(employee)
+            .as(StepVerifier::create)
+            .expectNextCount(1)
+            .verifyComplete();
   }
 }
