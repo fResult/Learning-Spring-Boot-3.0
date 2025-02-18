@@ -21,6 +21,27 @@ public class StartupConfig {
           .as(StepVerifier::create)
           .expectNextCount(1)
           .verifyComplete();
+
+      template
+          .insert(Employee.class)
+          .using(new Employee("Frodo", "ring bearer"))
+          .then()
+          .as(StepVerifier::create)
+          .verifyComplete();
+
+      template
+          .insert(Employee.class)
+          .using(new Employee("Bilbo", "burglar"))
+          .then()
+          .as(StepVerifier::create)
+          .verifyComplete();
+
+      template
+          .insert(Employee.class)
+          .using(new Employee("Gandalf", "wizard"))
+          .then()
+          .as(StepVerifier::create)
+          .verifyComplete();
     };
   }
 }
