@@ -22,4 +22,12 @@ public class EmployeeController {
   public Mono<ResponseEntity<List<Employee>>> all() {
     return this.employeeRepository.findAll().collectList().map(ResponseEntity::ok);
   }
+
+  @GetMapping("/{id}")
+  public Mono<ResponseEntity<Employee>> byId(Long id) {
+    return this.employeeRepository
+        .findById(id)
+        .map(ResponseEntity::ok)
+        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+  }
 }
