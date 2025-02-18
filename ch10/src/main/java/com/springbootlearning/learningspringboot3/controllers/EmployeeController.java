@@ -50,6 +50,14 @@ public class EmployeeController {
         .switchIfEmpty(respondNotFoundMono());
   }
 
+  @DeleteMapping("/{id}")
+  public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
+    return employeeRepository
+        .deleteById(id)
+        .map(deleted -> ResponseEntity.noContent().<Void>build())
+        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+  }
+
   private ResponseEntity<Employee> toCreatedResponseEntity(Employee createdResource) {
     return ResponseEntity.created(URI.create("/api/employees/" + createdResource.id()))
         .body(createdResource);
