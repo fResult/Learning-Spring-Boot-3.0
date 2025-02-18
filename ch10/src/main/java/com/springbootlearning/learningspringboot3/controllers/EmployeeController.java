@@ -5,10 +5,7 @@ import com.springbootlearning.learningspringboot3.repositories.EmployeeRepositor
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -26,7 +23,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/{id}")
-  public Mono<ResponseEntity<Employee>> byId(Long id) {
+  public Mono<ResponseEntity<Employee>> byId(@PathVariable Long id) {
     return this.employeeRepository
         .findById(id)
         .map(ResponseEntity::ok)
@@ -34,9 +31,8 @@ public class EmployeeController {
   }
 
   @PostMapping
-  public Mono<ResponseEntity<Employee>> create(Mono<Employee> body) {
-    return body.flatMap(this.employeeRepository::save)
-        .map(this::toCreatedResponseEntity);
+  public Mono<ResponseEntity<Employee>> create(@RequestBody Mono<Employee> body) {
+    return body.flatMap(this.employeeRepository::save).map(this::toCreatedResponseEntity);
   }
 
   private ResponseEntity<Employee> toCreatedResponseEntity(Employee createdResource) {
