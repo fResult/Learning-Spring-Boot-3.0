@@ -1,18 +1,28 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Working with Data Reactively</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Writing a Reactive Web Controller</title>
 </head>
 <body>
 <h2>Employees</h2>
 <ul>
   <li th:each="employee : ${employees}">
-    <div th:text="${employee.name + ' (' + employee.role + ')'}"></div>
+    <p
+        th:text="${employee.name + ' (' + employee.role + ')'}">
+    </p>
   </li>
 </ul>
-<form method="post" th:action="@{/new-employee}" th:object="${newEmployee}">
-  <input th:field="*{name}" type="text"/>
-  <input th:field="*{role}" type="text"/>
-  <input type="submit"/>
+
+<form th:action="@{/new-employee}" th:object="${newEmployee}" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" th:field="*{name}"/>
+  <br />
+  <label for="role">Role: </label>
+  <input type="text" id="role" th:field="*{role}"/>
+  <br />
+  <input type="submit" value="Add Employee"/>
 </form>
 </body>
 </html>
