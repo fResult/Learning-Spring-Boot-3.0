@@ -54,8 +54,8 @@ public class EmployeeController {
   public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
     return employeeRepository
         .deleteById(id)
-        .map(deleted -> ResponseEntity.noContent().<Void>build())
-        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+        .map(ignored -> ResponseEntity.noContent().<Void>build())
+        .switchIfEmpty(respondNotFoundMono());
   }
 
   private ResponseEntity<Employee> toCreatedResponseEntity(Employee createdResource) {
@@ -71,7 +71,7 @@ public class EmployeeController {
             Optional.ofNullable(body.role()).orElse(existingEmployee.role()));
   }
 
-  private Mono<ResponseEntity<Employee>> respondNotFoundMono() {
+  private <T> Mono<ResponseEntity<T>> respondNotFoundMono() {
     return Mono.just(ResponseEntity.notFound().build());
   }
 }
