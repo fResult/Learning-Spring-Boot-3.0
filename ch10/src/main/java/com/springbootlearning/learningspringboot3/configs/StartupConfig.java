@@ -24,9 +24,9 @@ public class StartupConfig {
           .verifyComplete();
 
       final var insertEmployeeToTable = insertEmployee(template);
-      insertEmployeeToTable.accept(new Employee("Frodo", "ring bearer"));
-      insertEmployeeToTable.accept(new Employee("Bilbo", "burglar"));
-      insertEmployeeToTable.accept(new Employee("Gandalf", "wizard"));
+      insertEmployeeToTable.accept(Employee.withoutId("Frodo", "ring bearer"));
+      insertEmployeeToTable.accept(Employee.withoutId("Bilbo", "burglar"));
+      insertEmployeeToTable.accept(Employee.withoutId("Gandalf", "wizard"));
     };
   }
 
